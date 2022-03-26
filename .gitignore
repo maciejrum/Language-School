@@ -1,0 +1,9 @@
+.idea
+*.pyc 
+media
+db.sqlite3
+venv
+.DS_Store
+Pipfile
+Pipfile.lock
+
