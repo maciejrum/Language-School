@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block container %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if course.modules.all|length > 0 %}
+        <h3>Edit Modules of <b>{{ course.title }}</b></h3>
+    {% else %}
+        <h3>Add Modules in <b>{{ course.title }}</b></h3>
+    {% endif %}
+
+    {% if formset.errors %}
+        {{ formset.errors | crispy }}
+    {% endif %}
+
+    {{ formset | crispy}}
+    {{ formset.managment_form | crispy }}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

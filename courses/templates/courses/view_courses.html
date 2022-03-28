@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block container %}
+<div class="dashboard-content border-dashed p-3 m-4 view-height">
+
+{#    <div class="row border-bottom border-3 p-1 m-1">#}
+{#        <div class="col noPadding"><h3 class="color-header text-uppercase">Lista#}
+{#            Przepisów</h3></div>#}
+{#        <div class="col noPadding d-flex justify-content-end mb-2"><a#}
+{#                href="{% url 'home:home' %}"#}
+{#                class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Strona główna</a></div>#}
+{#    </div>#}
+
+{#    <div class="row border-bottom border-3 p-1 m-1">#}
+{#        <div class="col noPadding"><h3 class="color-header text-uppercase">Lista#}
+{#            Przepisów</h3></div>#}
+{#        <div class="col noPadding d-flex justify-content-end mb-2"><a#}
+{#                href="{% url 'courses:create-course' %}"#}
+{#                class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj#}
+{#            przepis</a></div>#}
+{#    </div>#}
+    <table class="table border-bottom schedules-content">
+        <thead>
+        <tr class="d-flex text-color-darker">
+            <th scope="col" class="col-1">ID</th>
+            <th scope="col" class="col-2">NAME</th>
+            <th scope="col" class="col-7">DESCRIPTION</th>
+            <th scope="col" class="col-2 center">ACTION</th>
+        </tr>
+        </thead>
+        <tbody class="text-color-lighter">
+        {%  for course in courses %}
+        <tr class="d-flex">
+            <th scope="row" class="col-1">{{ forloop.counter }}
+
+                </th>
+            <td class="col-2">
+                {{ course.title }}
+            </td>
+
+            <td class="col-7">
+                {{ course.overview }}
+
+            </td>
+            <td class="col-2 d-flex align-items-center justify-content-center flex-wrap">
+                <a href="#"
+                   class="btn btn-danger rounded-0 text-light m-1">View</a>
+                <a href="#"
+                   class="btn btn-info rounded-0 text-light m-1">Edit</a>
+{#                <a href="#"#}
+{#                   class="btn btn-warning rounded-0 text-light m-1">Add module</a>#}
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{#<div class="pagination">#}
+{#    <span class="step-links">#}
+{#        {% if recipes.has_previous %}#}
+{#            <a href="?page={{ recipes.previous_page_number }}">< poprzednia</a>#}
+{#        {% endif %}#}
+{##}
+{##}
+{#        {% for l in  recipes.paginator.page_range %}#}
+{#            <a href="?page={{forloop.counter}}">{{forloop.counter}}|</a>#}
+{#        {% endfor %}#}
+{##}
+{##}
+{#        {% if recipes.has_next %}#}
+{#            <a href="?page={{ recipes.next_page_number }}">następna ></a>#}
+{#        {% endif %}#}
+{#    </span>#}
+</div>
+
+
+</div>
+{% endblock%}
