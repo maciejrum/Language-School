@@ -73,7 +73,10 @@
 {#        {% endif %}#}
 {#    </span>#}
 </div>
+    {% if request.user.is_superuser %}
 
+          <a class="btn btn-danger rounded-0 text-light m-1"aria-current="page" href="{% url 'courses:create-course' %}">Create new course</a>
+    {% endif %}
 
 </div>
 {% endblock%}

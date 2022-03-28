@@ -2,11 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from django.views.generic.base import TemplateResponseMixin, View
 
 from courses.forms import ModuleFormset
-from courses.models import Course
+from courses.models import Course, Module, Content, Subject
 
 
 class CreateCourse(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -60,4 +60,51 @@ class CourseList(View):
         return render(request, 'courses/view_courses.html', context)
 
 
+class CreateModule(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Module
+    fields = ['course', 'title', 'description']
+    template_name = 'courses/create_module.html'
+    permission_required = 'course.add_module'
+    login_url = reverse_lazy('login')
+    raise_exception = True
+    success_url = reverse_lazy('home:home')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class CreateContent(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Content
+    fields = ['module', 'owner', 'title', 'content_text', 'content_files', 'content_images', 'content_urls']
+    template_name = 'courses/create_content.html'
+    permission_required = 'course.add_content'
+    login_url = reverse_lazy('login')
+    raise_exception = True
+    success_url = reverse_lazy('home:home')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class SubjectList(ListView):
+    template_name = "courses/view_subjects.html"
+    model = Subject
+    context_object_name = 'subjects'
+
+
+class SubjectDetails(View):
+    def get(self, request, subject_id):
+        subject = Subject.objects.get(pk=subject_id)
+        courses = Course.objects.filter(subject=subject)
+
+        return render(request, 'courses/view_subject.html', {'subject': subject, 'courses': courses})
+
+
+class CourseDetails(View):
+    def get(self, request, course_id):
+        course = Course.objects.get(pk=course_id)
+        modules = Module.objects.filter(course=course)
+
+        return render(request, 'courses/view_course.html', {'course': course, 'modules': modules})

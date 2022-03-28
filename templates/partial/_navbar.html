@@ -12,19 +12,23 @@
           <a class="nav-link active" aria-current="page" href="{% url 'home:home' %}">Home</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'courses:view-course' %}">Courses</a>
-        </li>
 
 {% block container %}
-    {% if request.user.is_superuser %}
-          <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'courses:create-course' %}">Create Course</a>
-        </li>
-    {% endif %}
+
 
 {% if user.is_authenticated %}
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'courses:view-subjects' %}">Subjects</a>
+        </li>
           <li class="nav-item">
+
+        <li class="nav-item">
+{#          <a class="nav-link active" aria-current="page" href="{% url 'courses:view-course' %}">Courses</a>#}
+        </li>
+          <li class="nav-item">
+
+
           <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Logout</a>
         </li>
     {% else %}

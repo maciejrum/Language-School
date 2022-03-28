@@ -32,8 +32,6 @@ class Course(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(get_user_model(), related_name='courses_joined', blank=True)
 
-    # course_image = models.ImageField(upload_to='images')
-
     class Meta:
         ordering = ('-created',)
 
@@ -57,41 +55,19 @@ class Module(models.Model):
 
 class Content(models.Model):
     module = models.ForeignKey('Module', related_name='contents', on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to={
-        'model__in': ('text', 'video', 'image', 'file')
-    })
-
-    object_id = models.PositiveIntegerField()
-    item = GenericForeignKey('content_type', 'object_id')
-
-
-class ItemBase(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='%(class)s_related')
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    content_text = models.TextField(blank=True)
+    content_files = models.FileField(upload_to='files', blank=True)
+    content_images = models.FileField(upload_to='content_images', blank=True)
+    content_urls = models.URLField(blank=True)
 
     def __str__(self):
         return self.title
 
     class Meta:
-        abstract = True
-
-    def render(self):
-        return render_to_string(f'courses/content/{self._meta.model_name}.html', {'item', self})
+        ordering = ('-created',)
 
 
-class Text(ItemBase):
-    content = models.TextField()
-
-
-class File(ItemBase):
-    content = models.FileField(upload_to='files')
-
-
-class Image(ItemBase):
-    content = models.FileField(upload_to='content_images')
-
-
-class Video(ItemBase):
-    content = models.URLField()
