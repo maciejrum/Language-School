@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block container %}
+<form action="{% url 'courses:create-subject' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>Add new subject</h3>
+    {% if form.errors %}
+        {{ form | as_crispy_field }}
+        {{ form.errors }}
+    {% endif %}
+
+{{ form | crispy }}
+
+<button type="submit">Save</button>
+</form>
+{% endblock %}

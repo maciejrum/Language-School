@@ -2,7 +2,8 @@
 {% block title %}{% endblock %}
 {% block container %}
 <div>
-    <h1>{{ subject.title }}</h1>
+    <h8>Subject - {{ subject.title }}</h8>
+    <h2>Courses:</h2>
    <table class="table border-bottom schedules-content">
         <thead>
         <tr class="d-flex text-color-darker">
@@ -33,6 +34,8 @@
                 <a href="#"
                    class="btn btn-info rounded-0 text-light m-1">Edit</a>
                 {% endif %}
+            <a href="{% url 'courses:delete-course' course.id %}"
+                   class="btn btn-info rounded-0 text-light m-1">Delete</a>
 {#                <a href="#"#}
 {#                   class="btn btn-warning rounded-0 text-light m-1">Add module</a>#}
             </td>

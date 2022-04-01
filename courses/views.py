@@ -2,11 +2,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DeleteView
 from django.views.generic.base import TemplateResponseMixin, View
 
 from courses.forms import ModuleFormset
 from courses.models import Course, Module, Content, Subject
+
+from .forms import SubjectForm
 
 
 class CreateCourse(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -42,7 +44,7 @@ class CourseModuleUpdateView(TemplateResponseMixin, View):
         formset = self.get_formset(data=request.POST)
         if formset.is_valid():
             formset.save()
-            return redirect('courses:home')
+            return redirect('courses:view-subjects')
         return self.render_to_response({'course': self.course, 'formset': formset})
 
 
@@ -67,7 +69,7 @@ class CreateModule(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'course.add_module'
     login_url = reverse_lazy('login')
     raise_exception = True
-    success_url = reverse_lazy('home:home')
+    success_url = reverse_lazy('courses:view-subjects')
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -81,7 +83,7 @@ class CreateContent(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'course.add_content'
     login_url = reverse_lazy('login')
     raise_exception = True
-    success_url = reverse_lazy('home:home')
+    success_url = reverse_lazy('courses:view-subjects')
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -92,6 +94,12 @@ class SubjectList(ListView):
     template_name = "courses/view_subjects.html"
     model = Subject
     context_object_name = 'subjects'
+
+
+# class ModelList(ListView):
+#     template_name = "courses/view.html"
+#     model = Subject
+#     context_object_name = 'subjects'
 
 
 class SubjectDetails(View):
@@ -108,3 +116,73 @@ class CourseDetails(View):
         modules = Module.objects.filter(course=course)
 
         return render(request, 'courses/view_course.html', {'course': course, 'modules': modules})
+
+
+class SubjectUpdateView(TemplateResponseMixin, View):
+    template_name = 'courses/edit_subject.html'
+    subject = None
+
+    def get_formset(self, data=None):
+        return SubjectForm(instance=self.subject, data=data)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.subject = get_object_or_404(Subject, id=kwargs['pk'])
+        return super().dispatch(request, kwargs['pk'])
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_formset()
+        return self.render_to_response({'subject': self.subject, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_formset(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('courses:view-subjects')
+        return self.render_to_response({'subject': self.subject, 'form': form})
+
+
+class SubjectDeleteView(View):
+    def get(self, request, subject_id):
+        subject = Subject.objects.get(id=subject_id)
+        subject.delete()
+        return redirect("courses:view-subjects")
+
+
+class CourseDeleteView(View):
+    def get(self, request, course_id):
+        course = Course.objects.get(id=course_id)
+        course.delete()
+        return redirect("courses:view-courses")
+
+
+class ModuleDeleteView(View):
+    def get(self, request, module_id):
+        module = Module.objects.get(id=module_id)
+        module.delete()
+        return redirect("courses:view-modules")
+
+
+class ContentDeleteView(View):
+    def get(self, request, content_id):
+        content = Content.objects.get(id=content_id)
+        content.delete()
+        return redirect("courses:view-contents")
+
+
+class SubjectCreate(LoginRequiredMixin, CreateView):
+    model = Subject
+    fields = ['title']
+    template_name = 'courses/create_subject.html'
+    login_url = reverse_lazy('login')
+    raise_exception = True
+    success_url = reverse_lazy('courses:view-subjects')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class ContentListView(ListView):
+    template_name = "courses/view_contents.html"
+    model = Content
+    context_object_name = 'contents'
