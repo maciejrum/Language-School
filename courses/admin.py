@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Subject, Module, Course, Content
+from .models import Subject, Module, Course, Content, Word, UserWord
 
 
 @admin.register(Subject)
@@ -32,6 +32,13 @@ class ContentAdmin(admin.ModelAdmin):
     list_display = ('module', 'owner', 'title', 'content_text', 'content_files', 'content_images', 'content_urls')
 
 
+@admin.register(Word)
+class WordAdmin(admin.ModelAdmin):
+    list_display = ('student', 'category', 'source', 'translation', 'language', 'likes', 'known')
 
+
+@admin.register(UserWord)
+class UserWordAdmin(admin.ModelAdmin):
+    list_display = ('user', 'word', 'known')
 
 

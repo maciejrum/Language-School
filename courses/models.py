@@ -71,3 +71,21 @@ class Content(models.Model):
         ordering = ('-created',)
 
 
+class Word(models.Model):
+    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    source = models.CharField(max_length=200)
+    translation = models.CharField(max_length=200, blank=True)
+    language = models.ForeignKey('Subject', related_name='words', on_delete=models.CASCADE)
+    likes = models.IntegerField(default=0)
+    known = models.IntegerField(default=0)
+    category = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.source
+
+
+class UserWord(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    word = models.ForeignKey('Word', related_name='user_words', on_delete=models.CASCADE)
+    known = models.IntegerField(default=0)
+

@@ -6,59 +6,40 @@
     <table class="table border-bottom schedules-content">
         <thead>
         <tr class="d-flex text-color-darker">
-            <th scope="col" class="col-1">MODULE</th>
-            <th scope="col" class="col-2">OWNER</th>
-            <th scope="col" class="col-3">TITLE</th>
-            <th scope="col" class="col-4">TEXT</th>
-            <th scope="col" class="col-5">FILES</th>
-            <th scope="col" class="col-6">IMAGES</th>
-            <th scope="col" class="col-7">URLS</th>
-            <th scope="col" class="col-8 center">ACTION</th>
-
+{#            <th scope="col" class="col-1">ID</th>#}
+            <th scope="col" class="col-2">NAME</th>
+            <th scope="col" class="col-7">DESCRIPTION</th>
+            <th scope="col" class="col-2 center">ACTION</th>
         </tr>
         </thead>
         <tbody class="text-color-lighter">
         {%  for content in contents %}
         <tr class="d-flex">
-            <th scope="row" class="col-1">{{ content.module }}
+{#            <th scope="row" class="col-1">{{ forloop.counter }}#}
 
                 </th>
             <td class="col-2">
-                {{ content.owner }}
-            </td>
-
-            <td class="col-3">
                 {{ content.title }}
-
             </td>
 
-            <td class="col-4">
-                {{ content.content_text }}
-
-            </td>
-            <td class="col-5">
-                {{ content.content_files }}
-
-            </td>
-
-            <td class="col-6">
-                {{ content.content_images }}
-
-            </td>
             <td class="col-7">
-                {{ content.content_urls }}
+                {{ content.description }}
 
             </td>
-
             <td class="col-2 d-flex align-items-center justify-content-center flex-wrap">
                 <a href="#"
                    class="btn btn-danger rounded-0 text-light m-1">View</a>
+                {% if request.user.is_superuser %}
                 <a href="#"
                    class="btn btn-info rounded-0 text-light m-1">Edit</a>
+                {% endif %}
+                        <a href="#}"
+                   class="btn btn-info rounded-0 text-light m-1">Delete</a>
+
             </td>
         </tr>
-        {% endfor %}
 
+        {% endfor %}
         </tbody>
     </table>
 

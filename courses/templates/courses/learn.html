@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+{% load static %}
+{% block container %}
+
+        <div id="colorlib-main">
+        <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container">
+            <div class="row d-flex">
+
+            	<div class="col-xl-12 py-5 px-md-5">
+                    <br><br><br><br>
+
+	            	<div class="card text-center">
+                        <div class="card-header">
+                            {{card.category}}
+                        </div>
+                        <div class="card-body">
+                            <h4 id="flip" class="card-text">{{card.source}}</h4>
+                            <br><br>
+                            <button href="#" class="btn btn-danger" onclick="flipCard()">
+                                <i class="fa fa-exchange"></i>
+                                Flip Card
+                            </button>
+                            <a href="{% url 'courses:mark_known' card.id %}" class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                I Know It
+                            </a>
+                            <a href="{% url 'courses:learn' %}" class="btn btn-primary">
+                                Next Card
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+		    	</div>
+
+            </div>
+        </div>
+    	</section>
+    </div>
+
+
+
+    <script type="text/javascript">
+        function flipCard() {
+            if (document.getElementById('flip').innerHTML == "{{card.translation}}"){
+                document.getElementById('flip').innerHTML = "{{card.source}}";
+            }
+            else if (document.getElementById('flip').innerHTML == "{{card.source}}"){
+                document.getElementById('flip').innerHTML = "{{card.translation}}";
+            }
+            else{
+                document.getElementById('flip').innerHTML = "blabla";
+            }
+        }
+    </script>
+
+{% endblock%}

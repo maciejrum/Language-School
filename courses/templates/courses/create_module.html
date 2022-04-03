@@ -7,7 +7,7 @@
     {% csrf_token %}
     <h3>Add new modules</h3>
     {% if form.errors %}
-        {{ form | as_crispy_field }}
+{#        {{ form | as_crispy_field }}#}
         {{ form.errors }}
     {% endif %}
 

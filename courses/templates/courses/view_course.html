@@ -34,8 +34,9 @@
                 <a href="#"
                    class="btn btn-info rounded-0 text-light m-1">Edit</a>
                 {% endif %}
-{#                <a href="#"#}
-{#                   class="btn btn-warning rounded-0 text-light m-1">Add module</a>#}
+                        <a href="{% url 'courses:delete-module' module.id %}"
+                   class="btn btn-info rounded-0 text-light m-1">Delete</a>
+
             </td>
         </tr>
 
@@ -48,14 +49,14 @@
     <div>
     {% if request.user.is_superuser %}
 
-          <a class="btn btn-danger rounded-0 text-light m-1"aria-current="page" href="{% url 'courses:course-modules-update' course.id %}">Create new module</a>
+          <a class="btn btn-danger rounded-0 text-light m-1"aria-current="page" href="{% url 'courses:create-module'%}">Create new module</a>
 
     {% endif %}
 
     {% else %}
     <h2>No modules in course!</h2>
 
-          <a class="btn btn-danger rounded-0 text-light m-1"aria-current="page" href="{% url 'courses:course-modules-update' course.id %}">Create new module</a>
+          <a class="btn btn-danger rounded-0 text-light m-1"aria-current="page" href="{% url 'courses:create-module'%}">Create new module</a>
 
 {% endif %}
 </div>
