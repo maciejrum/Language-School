@@ -134,6 +134,14 @@ class SubjectDetails(View):
         return render(request, 'courses/view_subject.html', {'subject': subject, 'courses': courses})
 
 
+class ContentDetails(View):
+    def get(self, request, content_id):
+        content = Content.objects.get(pk=content_id)
+        modules = Module.objects.filter(content=content)
+
+        return render(request, 'courses/view_subject.html', {'content': content, 'modules': modules})
+
+
 class CourseDetails(View):
     def get(self, request, course_id):
         course = Course.objects.get(pk=course_id)
